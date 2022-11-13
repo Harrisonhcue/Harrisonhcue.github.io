@@ -52,65 +52,65 @@ const GitProfile = ({ config }) => {
   }, [theme]);
 
   const loadData = useCallback(() => {
-    // axios
-    //   .get(`https://api.github.com/users/${sanitizedConfig.github.username}`)
-    //   .then((response) => {
-    //     let data = response.data;
+    axios
+      .get(`https://api.github.com/users/${sanitizedConfig.github.username}`)
+      .then((response) => {
+        let data = response.data;
 
-    //     let profileData = {
-    //       avatar: data.avatar_url,
-    //       name: data.name ? data.name : '',
-    //       bio: data.bio ? data.bio : '',
-    //       location: data.location ? data.location : '',
-    //       company: data.company ? data.company : '',
-    //     };
-    //     window.localStorage.setItem('profileData', JSON.stringify(profileData));
-    //     setProfile(profileData);
-    //     return data;
-    //   })
-    //   .then((userData) => {
-    //     let excludeRepo = ``;
-    //     if (userData.public_repos === 0) {
-    //       setRepo([]);
-    //       return;
-    //     }
+        let profileData = {
+          avatar: data.avatar_url,
+          name: data.name ? data.name : '',
+          bio: data.bio ? data.bio : '',
+          location: data.location ? data.location : '',
+          company: data.company ? data.company : '',
+        };
+        window.localStorage.setItem('profileData', JSON.stringify(profileData));
+        setProfile(profileData);
+        return data;
+      })
+      .then((userData) => {
+        let excludeRepo = ``;
+        if (userData.public_repos === 0) {
+          setRepo([]);
+          return;
+        }
 
-    //     sanitizedConfig.github.exclude.projects.forEach((project) => {
-    //       excludeRepo += `+-repo:${sanitizedConfig.github.username}/${project}`;
-    //     });
+        sanitizedConfig.github.exclude.projects.forEach((project) => {
+          excludeRepo += `+-repo:${sanitizedConfig.github.username}/${project}`;
+        });
 
-    //     let query = `user:${
-    //       sanitizedConfig.github.username
-    //     }+fork:${!sanitizedConfig.github.exclude.forks}${excludeRepo}`;
+        let query = `user:${
+          sanitizedConfig.github.username
+        }+fork:${!sanitizedConfig.github.exclude.forks}${excludeRepo}`;
 
-    //     let url = `https://api.github.com/search/repositories?q=${query}&sort=${sanitizedConfig.github.sortBy}&per_page=${sanitizedConfig.github.limit}&type=Repositories`;
+        let url = `https://api.github.com/search/repositories?q=${query}&sort=${sanitizedConfig.github.sortBy}&per_page=${sanitizedConfig.github.limit}&type=Repositories`;
 
-    //     axios
-    //       .get(url, {
-    //         headers: {
-    //           'Content-Type': 'application/vnd.github.v3+json',
-    //         },
-    //       })
-    //       .then((response) => {
-    //         let data = response.data;
-    //         window.localStorage.setItem('repoData', JSON.stringify(data.items));
-    //         setRepo(data.items);
-    //       })
-    //       .catch((error) => {
-    //         handleError(error);
-    //       });
-    //   })
-    //   .catch((error) => {
-    //     handleError(error);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
-    var profileData = JSON.parse(window.localStorage.getItem('profileData'));
-    setProfile(profileData);
-    var repoData = JSON.parse(window.localStorage.getItem('repoData'));
-    setRepo(repoData);
-    setLoading(false);
+        axios
+          .get(url, {
+            headers: {
+              'Content-Type': 'application/vnd.github.v3+json',
+            },
+          })
+          .then((response) => {
+            let data = response.data;
+            window.localStorage.setItem('repoData', JSON.stringify(data.items));
+            setRepo(data.items);
+          })
+          .catch((error) => {
+            handleError(error);
+          });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    // var profileData = JSON.parse(window.localStorage.getItem('profileData'));
+    // setProfile(profileData);
+    // var repoData = JSON.parse(window.localStorage.getItem('repoData'));
+    // setRepo(repoData);
+    // setLoading(false);
   }, [setLoading]);
 
   const handleError = (error) => {
