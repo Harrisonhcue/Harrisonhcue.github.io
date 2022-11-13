@@ -1,0 +1,12 @@
+public
+src
+.eslintignore
+.eslintrc.js
+.prettierignore
+.prettierrc
+gitprofile.config.js
+index.html
+library.config.js
+tailwind.config.mjs
+vite.config.js
+stats.html
